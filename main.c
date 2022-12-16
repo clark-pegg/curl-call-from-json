@@ -11,7 +11,7 @@ int main(void)
 
     struct curl_slist * chunk = NULL;
     chunk = curl_slist_append(chunk, "LL-Version: 2021-03-01");
-    chunk = curl_slist_append(chunk, "x-server-key: dev_6bcd909878f544df81e4362908b1317a");
+    chunk = curl_slist_append(chunk, "x-server-key: ");
     chunk = curl_slist_append(chunk, "Content-Type: application/json");
 
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, "{\"game_version\": \"1.0.0.0\"}");
