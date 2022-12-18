@@ -2,4 +2,6 @@
 
 int main(){
   curlCallFromJSON("example.json");
+
+  return 0;
 }

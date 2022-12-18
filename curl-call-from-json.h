@@ -7,4 +7,4 @@
 long getFileSize(FILE * file);
 char * JSONtoString(char * file);
 struct curl_slist * objectToList(cJSON * object);
-int curlCallFromJSON(char * filename);
+void curlCallFromJSON(char * filename);

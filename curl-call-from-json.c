@@ -13,7 +13,7 @@ long getFileSize(FILE * file){
 }
 
 char * JSONtoString(char * file){
-  FILE * JSON = fopen("parameters.json", "r");
+  FILE * JSON = fopen(file, "r");
 
   long fileSize = getFileSize(JSON);
 
@@ -55,7 +55,7 @@ struct curl_slist * objectToList(cJSON * object){
   return chunk;
 }
 
-int curlCallFromJSON(char * filename){
+void curlCallFromJSON(char * filename){
   char * string = JSONtoString(filename);
   
   cJSON * json = cJSON_Parse(string);
@@ -86,6 +86,4 @@ int curlCallFromJSON(char * filename){
     cJSON_Delete(json);
     curl_slist_free_all(headerChunk);
   }
-
-  return 0;
 }
