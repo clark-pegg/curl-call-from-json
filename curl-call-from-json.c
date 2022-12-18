@@ -66,24 +66,24 @@ void curlCallFromJSON(char * filename){
 
   CURL * curl = curl_easy_init();
 
-  if(curl) {
-    curl_easy_setopt(curl, CURLOPT_URL, cJSON_GetObjectItem(json, "url")->valuestring);
+  if(!curl) return;
 
-    cJSON * headerObject = cJSON_GetObjectItem(json, "header");
+  curl_easy_setopt(curl, CURLOPT_URL, cJSON_GetObjectItem(json, "url")->valuestring);
 
-    struct curl_slist * headerChunk = objectToList(headerObject);
+  cJSON * headerObject = cJSON_GetObjectItem(json, "header");
 
-    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headerChunk);
+  struct curl_slist * headerChunk = objectToList(headerObject);
 
-    char * dataString = cJSON_Print(cJSON_GetObjectItem(json, "data"));
-    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, dataString);
+  curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headerChunk);
 
-    curl_easy_perform(curl);
-  
-    free(dataString);
-    curl_easy_cleanup(curl);
-    curl_global_cleanup();
-    cJSON_Delete(json);
-    curl_slist_free_all(headerChunk);
-  }
+  char * dataString = cJSON_Print(cJSON_GetObjectItem(json, "data"));
+  curl_easy_setopt(curl, CURLOPT_POSTFIELDS, dataString);
+
+  curl_easy_perform(curl);
+
+  free(dataString);
+  curl_easy_cleanup(curl);
+  curl_global_cleanup();
+  cJSON_Delete(json);
+  curl_slist_free_all(headerChunk);
 }
