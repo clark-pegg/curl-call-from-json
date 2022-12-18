@@ -1,6 +1,9 @@
 #include "curl-call-from-json.h"
 
 long getFileSize(FILE * file){
+  if(file == NULL)
+    return -1;
+
   unsigned long position = ftell(file);
 
   fseek(file, 0, SEEK_END);
@@ -12,29 +15,36 @@ long getFileSize(FILE * file){
   return fileSize;
 }
 
-char * JSONtoString(char * file){
-  FILE * JSON = fopen(file, "r");
+char * JSONtoString(char * filename){
+  FILE * json = fopen(filename, "r");
 
-  long fileSize = getFileSize(JSON);
+  if(!json)
+    return NULL;
+
+  long fileSize = getFileSize(json);
 
   char * string = malloc(fileSize + 1); // +1 for space for terminating character
 
+  if(!string){
+    fclose(json);
+    return NULL;
+  }
+    
   int position;
 
   for(position = 0; position < fileSize; position++)
-    string[position] = fgetc(JSON);
+    string[position] = fgetc(json);
 
   string[position] = '\0';
 
-  fclose(JSON);
+  fclose(json);
 
   return string;
 }
 
 struct curl_slist * objectToList(cJSON * object){
-  if(!object){
+  if(!object)
     return NULL;
-  }
 
   struct curl_slist * chunk = NULL;
 
@@ -42,7 +52,10 @@ struct curl_slist * objectToList(cJSON * object){
 
   while(child){
     char * stringToPass = malloc(strlen(child->string) + strlen(": ") + strlen(child->valuestring) + 1);
-        
+    
+    if(!stringToPass)
+      return NULL;
+
     stringToPass[0] = '\0';
     strcat(strcat(strcat(stringToPass, child->string), ": "), child->valuestring);
     chunk = curl_slist_append(chunk, stringToPass);
