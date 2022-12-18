@@ -90,11 +90,14 @@ void curlCallFromJSON(char * filename){
   curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headerChunk);
 
   char * dataString = cJSON_Print(cJSON_GetObjectItem(json, "data"));
-  curl_easy_setopt(curl, CURLOPT_POSTFIELDS, dataString);
 
+  if(strcmp(dataString, "{\n}"))
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, dataString);
+    
   curl_easy_perform(curl);
 
   free(dataString);
+
   curl_easy_cleanup(curl);
   curl_global_cleanup();
   cJSON_Delete(json);
