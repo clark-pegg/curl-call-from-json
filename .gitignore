@@ -1,2 +1,3 @@
 *.json
-curl-call-from-json
+*.o
+*.a
